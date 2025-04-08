@@ -1,9 +1,12 @@
 package com.snackify.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
 public class LoginRequest {
-    private String email;
-    private String password;
+  @Email @NotBlank private String email;
+
+  @NotBlank private String password;
 }
