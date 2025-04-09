@@ -1,12 +1,15 @@
 package com.snackify.controller;
 
-import com.snackify.model.product;
+import com.snackify.model.Product;
 import com.snackify.repository.productRepository;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import java.util.List;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/products")
+@SecurityRequirement(name = "bearerAuth")
 public class productController {
 
   private final productRepository productRepository;
@@ -15,13 +18,15 @@ public class productController {
     this.productRepository = productRepository;
   }
 
-  @GetMapping
-  public List<product> getAllProducts() {
-    return productRepository.findAll();
+  @GetMapping("/view")
+  @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+  public List<Product> getAllProducts() {
+    return productRepository.findAll(); // both USER and ADMIN can see products
   }
 
-  @PostMapping
-  public product addProduct(@RequestBody product product) {
-    return productRepository.save(product);
+  @PostMapping("/add")
+  @PreAuthorize("hasRole('ADMIN')")
+  public Product addProduct(@RequestBody Product product) {
+    return productRepository.save(product); // only ADMIN can add products
   }
 }

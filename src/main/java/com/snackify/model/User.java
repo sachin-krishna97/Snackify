@@ -20,5 +20,6 @@ public class User {
 
   private String password;
 
-  private String role = "USER"; // default role
+  @Enumerated(EnumType.STRING)
+  private Role role;
 }

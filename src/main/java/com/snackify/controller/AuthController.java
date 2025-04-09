@@ -2,6 +2,7 @@ package com.snackify.controller;
 
 import com.snackify.dto.LoginRequest;
 import com.snackify.dto.RegisterRequest;
+import com.snackify.model.Role;
 import com.snackify.model.User;
 import com.snackify.repository.UserRepository;
 import com.snackify.security.JwtService;
@@ -32,10 +33,18 @@ public class AuthController {
       return "Email already in use!";
     }
 
-    User user = new User();
+    User user = new User(); // ✅ create the user first
     user.setName(request.getName());
     user.setEmail(request.getEmail());
     user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+    // ✅ assign ADMIN if email matches, else USER
+    if (request.getEmail().equals("admin@snackify.com")) {
+      user.setRole(Role.ADMIN);
+    } else {
+      user.setRole(Role.USER);
+    }
+
     userRepository.save(user);
     return "User registered successfully!";
   }
@@ -49,7 +58,7 @@ public class AuthController {
     }
 
     // 🔐 Generate JWT Token
-    String token = jwtService.generateToken(user.getEmail());
+    String token = jwtService.generateToken(user);
 
     // ✅ Print it in console for debug
     System.out.println("Generated JWT Token: " + token);
