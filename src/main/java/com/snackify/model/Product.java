@@ -5,7 +5,7 @@ import lombok.*;
 
 @Data
 @Entity
-public class product {
+public class Product {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -13,6 +13,9 @@ public class product {
   private String name;
   private String description;
   private double price;
-  private String category; // e.g., "Sweet", "Savory"
-  private String imageUrl; // link to snack image
+  private String imageUrl;
+
+  @ManyToOne
+  @JoinColumn(name = "category_id") // this will create a foreign key
+  private Category category;
 }

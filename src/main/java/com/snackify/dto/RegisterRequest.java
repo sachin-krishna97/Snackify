@@ -1,10 +1,12 @@
 package com.snackify.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
 public class RegisterRequest {
-    private String name;
-    private String email;
-    private String password;
+  @NotBlank private String name;
+  @Email @NotBlank private String email;
+  @NotBlank private String password;
 }

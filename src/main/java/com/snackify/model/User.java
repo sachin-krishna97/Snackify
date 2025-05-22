@@ -1,6 +1,7 @@
 package com.snackify.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import lombok.*;
 
 @Entity
@@ -9,16 +10,23 @@ import lombok.*;
 @AllArgsConstructor
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    private String name;
+  private String name;
 
-    @Column(unique = true)
-    private String email;
+  @Column(unique = true)
+  private String email;
 
-    private String password;
+  private String password;
 
-    private String role = "USER"; // default role
+  @Enumerated(EnumType.STRING)
+  private Role role;
+
+  @Column private String otp;
+
+  @Column private LocalDateTime otpRequestedTime;
+
+  @Column private boolean isVerified = false;
 }
