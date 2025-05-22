@@ -1,6 +1,7 @@
 package com.snackify.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import lombok.*;
 
 @Entity
@@ -22,4 +23,10 @@ public class User {
 
   @Enumerated(EnumType.STRING)
   private Role role;
+
+  @Column private String otp;
+
+  @Column private LocalDateTime otpRequestedTime;
+
+  @Column private boolean isVerified = false;
 }

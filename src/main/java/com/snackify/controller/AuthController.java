@@ -6,6 +6,7 @@ import com.snackify.model.Role;
 import com.snackify.model.User;
 import com.snackify.repository.UserRepository;
 import com.snackify.security.JwtService;
+import com.snackify.service.MailService;
 import jakarta.validation.Valid;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
@@ -20,11 +21,14 @@ public class AuthController {
   private final UserRepository userRepository;
   private final BCryptPasswordEncoder passwordEncoder;
   private final JwtService jwtService;
+  private final MailService mailService;
 
-  public AuthController(UserRepository userRepository, JwtService jwtService) {
+  public AuthController(
+      UserRepository userRepository, JwtService jwtService, MailService MailService) {
     this.userRepository = userRepository;
     this.jwtService = jwtService;
     this.passwordEncoder = new BCryptPasswordEncoder();
+    this.mailService = MailService;
   }
 
   @PostMapping("/register")
@@ -65,5 +69,18 @@ public class AuthController {
 
     // 📦 Return the token in JSON format
     return ResponseEntity.ok().body(Map.of("token", token));
+  }
+
+  @PostMapping("/send-otp")
+  public ResponseEntity<String> sendOtp(@RequestParam String email) {
+    String otp = mailService.generateOtp();
+
+    try {
+      mailService.sendOtpEmail(email, otp);
+      return ResponseEntity.ok("OTP sent to " + email);
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+          .body("Failed to send OTP: " + e.getMessage());
+    }
   }
 }

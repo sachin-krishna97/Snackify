@@ -1,7 +1,7 @@
 package com.snackify.controller;
 
 import com.snackify.model.Product;
-import com.snackify.repository.productRepository;
+import com.snackify.repository.ProductRepository;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import java.util.List;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
 @SecurityRequirement(name = "bearerAuth")
 public class productController {
 
-  private final productRepository productRepository;
+  private final ProductRepository productRepository;
 
-  public productController(productRepository productRepository) {
+  public productController(ProductRepository productRepository) {
     this.productRepository = productRepository;
   }
 
